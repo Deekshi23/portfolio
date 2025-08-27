@@ -1,4 +1,13 @@
 export const getMockData = () => {
+  // Handle different paths for development vs production
+  const getImagePath = () => {
+    if (process.env.NODE_ENV === 'production') {
+      return "/portfolio/static/profile/Deekshithaa img.jpeg";
+    } else {
+      return "/static/profile/Deekshithaa img.jpeg";
+    }
+  };
+
   return {
     hero: {
       name: "Deekshithaa",
@@ -6,7 +15,7 @@ export const getMockData = () => {
       description: "A creative B.Sc. Computer Science graduate with expertise in Analytics, Data Science, and MERN Stack development. Passionate about transforming complex data into actionable insights and building scalable web applications that drive organizational growth and success."
     },
     about: {
-      profileImage: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      profileImage: getImagePath(),
       description: "I am a passionate MERN Stack Developer with a solid background in Analytics and Data Science. Currently working as a Full Stack Development Intern at United Technology, I specialize in building modern, scalable web applications with responsive UIs and efficient backend systems.",
       highlights: [
         "Expert in React.js, Node.js, Express.js, and MongoDB",

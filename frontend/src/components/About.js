@@ -13,6 +13,10 @@ const About = () => {
   const mockData = getMockData();
   const { about } = mockData;
 
+  // Debug logging
+  console.log('About component - Environment:', process.env.NODE_ENV);
+  console.log('About component - Profile image URL:', about.profileImage);
+
   useEffect(() => {
     const fetchProfileImage = async () => {
       // In production (GitHub Pages), skip API call and use fallback image directly
