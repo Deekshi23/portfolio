@@ -234,11 +234,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Health Check API"
-    - "Contact Form Submission API"
+    - "Contact Form End-to-End Integration"
     - "Contact Form Validation"
-    - "Message Retrieval API"
-    - "Database Integration"
+    - "Navigation and Portfolio Flow"
+    - "UI/UX and Toast Notifications"
+    - "Network Integration and Error Handling"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
