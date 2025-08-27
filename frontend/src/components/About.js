@@ -15,6 +15,13 @@ const About = () => {
 
   useEffect(() => {
     const fetchProfileImage = async () => {
+      // In production (GitHub Pages), skip API call and use fallback image directly
+      if (process.env.NODE_ENV === 'production') {
+        setIsLoading(false);
+        setImageError(true); // This will trigger fallback image usage
+        return;
+      }
+
       try {
         setIsLoading(true);
         const res = await axios.get(`http://127.0.0.1:8000/api/profile/latest-image`);
