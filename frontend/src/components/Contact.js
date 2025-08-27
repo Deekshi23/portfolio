@@ -33,25 +33,47 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Mock submission - replace with actual API call later
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast({
-        title: "Message sent successfully!",
-        description: "Thank you for your message. I'll get back to you soon.",
-        duration: 5000,
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/contact/message`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
       });
+
+      const result = await response.json();
       
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: ""
-      });
+      if (response.ok && result.success) {
+        toast({
+          title: result.message,
+          description: `Message ID: ${result.data.id}`,
+          duration: 5000,
+        });
+        
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: ""
+        });
+      } else {
+        // Handle API validation errors
+        const errorMessage = result.message || "Failed to send message";
+        const errors = result.errors ? result.errors.join(", ") : "";
+        
+        toast({
+          title: "Error sending message",
+          description: `${errorMessage}${errors ? ` - ${errors}` : ""}`,
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
     } catch (error) {
+      console.error('Contact form submission error:', error);
       toast({
-        title: "Error sending message",
-        description: "Please try again later or contact me directly via email.",
+        title: "Network Error",
+        description: "Unable to connect to server. Please try again later or contact me directly via email.",
         variant: "destructive",
         duration: 5000,
       });
