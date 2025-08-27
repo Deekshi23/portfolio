@@ -18,7 +18,7 @@ const About = () => {
       // In production (GitHub Pages), skip API call and use fallback image directly
       if (process.env.NODE_ENV === 'production') {
         setIsLoading(false);
-        setImageError(true); // This will trigger fallback image usage
+        // Don't set imageError to true, just leave fileId as null to use fallback
         return;
       }
 
@@ -56,23 +56,20 @@ const About = () => {
                   <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
                   </div>
-                ) : fileId && !imageError ? (
-                  <img
-                    src={`http://127.0.0.1:8000/api/profile/image/${fileId}`}
-                    alt="Deekshithaa"
-                    className="w-full h-full object-cover"
-                    onError={() => setImageError(true)}
-                  />
-                ) : about.profileImage ? (
-                  <img
-                    src={about.profileImage}
-                    alt="Deekshithaa"
-                    className="w-full h-full object-cover"
-                  />
                 ) : (
-                  <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                    <span className="text-gray-500">No Image</span>
-                  </div>
+                  <img
+                    src={fileId && !imageError
+                      ? `http://127.0.0.1:8000/api/profile/image/${fileId}`
+                      : about.profileImage
+                    }
+                    alt="Deekshithaa"
+                    className="w-full h-full object-cover"
+                    onError={() => {
+                      if (!imageError) {
+                        setImageError(true);
+                      }
+                    }}
+                  />
                 )}
               </div>
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/20 to-emerald-400/20"></div>
