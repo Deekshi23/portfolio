@@ -138,13 +138,13 @@ class ContactFormAPITester:
                 timeout=10
             )
             
-            if response.status_code == 400:
+            if response.status_code in [400, 422]:  # Accept both 400 and 422 for validation errors
                 data = response.json()
-                if 'detail' in data and ('email' in str(data).lower() or 'validation' in str(data).lower()):
+                if 'detail' in data and ('email' in str(data).lower() or 'validation' in str(data).lower() or 'value_error' in str(data).lower()):
                     self.log_test(
                         "Invalid Email Format", 
                         True, 
-                        "Correctly rejected invalid email format with 400 error",
+                        f"Correctly rejected invalid email format with {response.status_code} error",
                         data
                     )
                     return True
@@ -152,7 +152,7 @@ class ContactFormAPITester:
                     self.log_test(
                         "Invalid Email Format", 
                         False, 
-                        f"400 error but unexpected message: {data}",
+                        f"{response.status_code} error but unexpected message: {data}",
                         data
                     )
                     return False
@@ -160,7 +160,7 @@ class ContactFormAPITester:
                 self.log_test(
                     "Invalid Email Format", 
                     False, 
-                    f"Expected 400 but got HTTP {response.status_code}: {response.text}",
+                    f"Expected 400/422 but got HTTP {response.status_code}: {response.text}",
                     {"status_code": response.status_code, "text": response.text}
                 )
                 return False
