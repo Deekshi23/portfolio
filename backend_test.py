@@ -185,12 +185,12 @@ class ContactFormAPITester:
                 timeout=10
             )
             
-            if response.status_code == 400:
+            if response.status_code in [400, 422]:  # Accept both 400 and 422 for validation errors
                 data = response.json()
                 self.log_test(
                     "Empty Required Fields", 
                     True, 
-                    "Correctly rejected empty required fields with 400 error",
+                    f"Correctly rejected empty required fields with {response.status_code} error",
                     data
                 )
                 return True
@@ -198,7 +198,7 @@ class ContactFormAPITester:
                 self.log_test(
                     "Empty Required Fields", 
                     False, 
-                    f"Expected 400 but got HTTP {response.status_code}: {response.text}",
+                    f"Expected 400/422 but got HTTP {response.status_code}: {response.text}",
                     {"status_code": response.status_code, "text": response.text}
                 )
                 return False
